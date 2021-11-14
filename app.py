@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
+from bson.objectid import ObjectId
 from pymongo import MongoClient
 
 client = MongoClient()
@@ -62,7 +63,6 @@ def playlists_submit():
     return redirect(url_for('playlists_index'))
 
 # Add this with the rest of your import statements
-from bson.objectid import ObjectId
 # ...
 
 @app.route('/playlists/<playlist_id>')
@@ -97,4 +97,8 @@ def playlists_edit(playlist_id):
     # Add the title parameter here
     return render_template('playlists_edit.html', playlist=playlist, title='Edit Playlist')
 
-
+@app.route('/playlists/<playlist_id>/delete', methods=['POST'])
+def playlists_delete(playlist_id):
+    """Delete one playlist."""
+    playlists.delete_one({'_id': ObjectId(playlist_id)})
+    return redirect(url_for('playlists_index'))

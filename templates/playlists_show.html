@@ -1,10 +1,40 @@
- <!-- templates/playlists_show.html -->
+Delete Route: Destroying a Resource
+
+So we've come to the end of our RESTful and Resourceful routes. Only one to go: Delete.
+
+URL	HTTP Verb	Action
+/	GET	index
+/playlists/new	GET	new
+/playlists	POST	create
+/playlists/:id	GET	show
+/playlists/:id/edit	GET	edit
+/playlists/:id	PUT/PATCH	update
+/playlists/:id	DELETE	Destroy
+What the User Sees
+
+As always, we start with what the users sees and does. So let's make a link to delete a playlist.
+
+We can't set an <a> tag's method (it is always GET) so we are going to use a form to submit a DELETE request to our delete action path.
+
+Add the delete button to templates/playlists_show.html:
+
+<!-- templates/playlists_show.html -->
 {% extends 'base.html' %}
 
 {% block content %}
+<a href='/'>Back to Home</a>
+
 <h1>{{ playlist.title }}</h1>
 <h2>{{ playlist.description }}</h2>
 {% for video in playlist.videos %}
     <iframe width='420' height='315' src='{{ video }}'></iframe>
 {% endfor %}
+
+<p><a href='/playlists/{{ playlist._id }}/edit'>Edit</a></p>
+
+<!-- New code to add below -->
+<!-- Delete button -->
+<p><form method='POST' action='/playlists/{{ playlist._id }}/delete'>
+    <button type='submit'>Delete</button>
+</form></p>
 {% endblock %}
